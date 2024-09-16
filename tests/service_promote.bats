@@ -35,25 +35,25 @@ teardown() {
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) error when the service is already promoted" {
   run dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
-  assert_contains "${lines[*]}" "already promoted as MEMCACHED_URL"
+  assert_contains "${lines[*]}" "already promoted as GOTENBERG_URL"
 }
 
-@test "($PLUGIN_COMMAND_PREFIX:promote) changes MEMCACHED_URL" {
-  dokku config:set my-app "MEMCACHED_URL=memcached://host:11211" "DOKKU_MEMCACHED_BLUE_URL=memcached://dokku-memcached-l:11211"
+@test "($PLUGIN_COMMAND_PREFIX:promote) changes GOTENBERG_URL" {
+  dokku config:set my-app "GOTENBERG_URL=gotenberg://host:11211" "DOKKU_GOTENBERG_BLUE_URL=gotenberg://dokku-gotenberg-l:11211"
   dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
-  url=$(dokku config:get my-app MEMCACHED_URL)
-  assert_equal "$url" "memcached://dokku-memcached-l:11211"
+  url=$(dokku config:get my-app GOTENBERG_URL)
+  assert_equal "$url" "gotenberg://dokku-gotenberg-l:11211"
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:promote) creates new config url when needed" {
-  dokku config:set my-app "MEMCACHED_URL=memcached://host:11211" "DOKKU_MEMCACHED_BLUE_URL=memcached://dokku-memcached-l:11211"
+  dokku config:set my-app "GOTENBERG_URL=gotenberg://host:11211" "DOKKU_GOTENBERG_BLUE_URL=gotenberg://dokku-gotenberg-l:11211"
   dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
   run dokku config my-app
-  assert_contains "${lines[*]}" "DOKKU_MEMCACHED_"
+  assert_contains "${lines[*]}" "DOKKU_GOTENBERG_"
 }
-@test "($PLUGIN_COMMAND_PREFIX:promote) uses MEMCACHED_DATABASE_SCHEME variable" {
-  dokku config:set my-app "MEMCACHED_DATABASE_SCHEME=memcached2" "MEMCACHED_URL=memcached://host:11211/db" "DOKKU_MEMCACHED_BLUE_URL=memcached2://dokku-memcached-l:11211"
+@test "($PLUGIN_COMMAND_PREFIX:promote) uses GOTENBERG_DATABASE_SCHEME variable" {
+  dokku config:set my-app "GOTENBERG_DATABASE_SCHEME=gotenberg2" "GOTENBERG_URL=gotenberg://host:11211/db" "DOKKU_GOTENBERG_BLUE_URL=gotenberg2://dokku-gotenberg-l:11211"
   dokku "$PLUGIN_COMMAND_PREFIX:promote" l my-app
-  url=$(dokku config:get my-app MEMCACHED_URL)
-  assert_contains "$url" "memcached2://dokku-memcached-l:11211"
+  url=$(dokku config:get my-app GOTENBERG_URL)
+  assert_contains "$url" "gotenberg2://dokku-gotenberg-l:11211"
 }

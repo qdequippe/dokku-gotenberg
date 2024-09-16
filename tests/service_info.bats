@@ -21,19 +21,19 @@ teardown() {
 
 @test "($PLUGIN_COMMAND_PREFIX:info) success" {
   run dokku "$PLUGIN_COMMAND_PREFIX:info" l
-  assert_contains "${lines[*]}" "memcached://dokku-memcached-l:11211"
+  assert_contains "${lines[*]}" "gotenberg://dokku-gotenberg-l:11211"
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:info) replaces underscores by dash in hostname" {
   dokku "$PLUGIN_COMMAND_PREFIX:create" test_with_underscores
   run dokku "$PLUGIN_COMMAND_PREFIX:info" test_with_underscores
-  assert_contains "${lines[*]}" "memcached://dokku-memcached-test-with-underscores:11211"
+  assert_contains "${lines[*]}" "gotenberg://dokku-gotenberg-test-with-underscores:11211"
   dokku --force "$PLUGIN_COMMAND_PREFIX:destroy" test_with_underscores
 }
 
 @test "($PLUGIN_COMMAND_PREFIX:info) success with flag" {
   run dokku "$PLUGIN_COMMAND_PREFIX:info" l --dsn
-  assert_output "memcached://dokku-memcached-l:11211"
+  assert_output "gotenberg://dokku-gotenberg-l:11211"
 
   run dokku "$PLUGIN_COMMAND_PREFIX:info" l --config-dir
   assert_success
